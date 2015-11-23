@@ -4,5 +4,6 @@ importer:
   volumes:
     - ~/.aws:/root/.aws
     - ./data:/data
+    - ./etc/confd/templates:/etc/confd/templates
   env_file:
     - ./.env

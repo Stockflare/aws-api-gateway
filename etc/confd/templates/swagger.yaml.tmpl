@@ -47,3 +47,49 @@ paths:
               application/json:
           4\\d{2}:
             statusCode: "403"
+  /register:
+    post:
+      description: |
+        Register with user-id and password
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              identity:
+                type: string
+              token:
+                type: string
+              expires:
+                type: integer
+        '409':
+          description: User logged in
+        '400':
+          description: Could not create user
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://users.api.{{getenv "HOSTED_ZONE"}}/register
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+          4\\d{2}:
+            statusCode: "409"
+          4\\d{2}:
+            statusCode: "400"

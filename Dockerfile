@@ -20,6 +20,7 @@ RUN mvn assembly:assembly \
 
 VOLUME ["/root/.aws"]
 VOLUME ["/data"]
+VOLUME ["/etc/confd/templates"]
 
 WORKDIR /data
 

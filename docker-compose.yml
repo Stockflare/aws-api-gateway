@@ -1,0 +1,8 @@
+importer:
+  build: .
+  command: /docker-entrypoint.sh
+  volumes:
+    - ~/.aws:/root/.aws
+    - ./data:/data
+  env_file:
+    - ./.env

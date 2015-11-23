@@ -1,0 +1,5 @@
+[template]
+src = "swagger.yaml.tmpl"
+dest = "/data/swagger.yaml"
+owner = "root"
+mode = "0755"

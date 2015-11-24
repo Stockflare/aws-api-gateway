@@ -5,7 +5,7 @@ info:
 produces:
   - application.json
 paths:
-  /login:
+  /users/login:
     post:
       description: |
         Login with user-id and password
@@ -47,7 +47,7 @@ paths:
               application/json:
           4\\d{2}:
             statusCode: "403"
-  /register:
+  /users/register:
     post:
       description: |
         Register with user-id and password
@@ -93,3 +93,30 @@ paths:
             statusCode: "409"
           4\\d{2}:
             statusCode: "400"
+  /users/lost:
+    get:
+      description: |
+        Request lost password token
+      parameters:
+        - name: username
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://users.api.{{getenv "HOSTED_ZONE"}}/lost
+        requestParameters:
+          integration.request.querystring.username: "method.request.querystring.username"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

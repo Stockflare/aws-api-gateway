@@ -120,3 +120,80 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /directory:
+    put:
+      description: |
+        Properties associated with a particular identity
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              identities:
+                type: array
+                items:
+                  type: string
+              keys:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Create or update a set of proeprties for an identity
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              identity:
+                type: string
+              properties:
+                type: array
+                items:
+                  type: object
+      responses:
+        '201':
+          description: All properties for the identity have been created
+        '403':
+          description: An attempt to update a locked property for the identity was made
+        '409':
+          description: A duplicate entry for a property exists within the directory already
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "properties": $input.json('$.properties')
+            }
+        responses:
+          default:
+            statusCode: "201"
+            responseTemplates:
+              application/json:
+          4\\d{2}:
+            statusCode: "403"
+          4\\d{2}:
+            statusCode: "401"

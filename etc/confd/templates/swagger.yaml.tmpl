@@ -460,3 +460,44 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /historical:
+    put:
+      description: |
+        Retrieve Instrument historical data based on SIC and other fields
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              sics:
+                type: string
+              after:
+                type: integer
+              before:
+                type: integer
+              select:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://historical.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

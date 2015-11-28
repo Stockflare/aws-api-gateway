@@ -197,3 +197,266 @@ paths:
             statusCode: "403"
           4\\d{2}:
             statusCode: "401"
+    delete:
+      description: |
+        Delete a set of proeprties for an identity
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              identity:
+                type: string
+              keys:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: All keys for the identity have been deleted
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "keys": $input.json('$.keys')
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /search:
+    put:
+      description: |
+        Search for Instruments with search term
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              term:
+                type: string
+              conditions:
+                type: object
+              sorting:
+                type: object
+              select:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/search
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /search/filter:
+    put:
+      description: |
+        Filter all Instruments with conditions
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              conditions:
+                type: object
+              sorting:
+                type: object
+              select:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/filter
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /search/aggregate:
+    put:
+      description: |
+        Aggregate Instrument data with conditions
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              conditions:
+                type: object
+              type:
+                type: string
+              field:
+                type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/aggregate
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /peers:
+    get:
+      description: |
+        Request Instruments that are peers of SIC
+      parameters:
+        - name: sic
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://peers.api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.sic: "method.request.querystring.sic"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /peers/aggregate:
+    get:
+      description: |
+        Aggregate a field for all peers of a SIC
+      parameters:
+        - name: sic
+          in: query
+          required: true
+          type: string
+        - name: type
+          in: query
+          required: true
+          type: string
+        - name: field
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://peers.api.{{getenv "HOSTED_ZONE"}}/aggregate
+        requestParameters:
+          integration.request.querystring.sic: "method.request.querystring.sic"
+          integration.request.querystring.type: "method.request.querystring.type"
+          integration.request.querystring.field: "method.request.querystring.field"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /instruments:
+    put:
+      description: |
+        Retrieve Instrument details based on SIC and other fields
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              ric:
+                type: string
+              repo_no:
+                type: string
+              isin:
+                type: string
+              sic:
+                type: string
+              sics:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://instruments.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

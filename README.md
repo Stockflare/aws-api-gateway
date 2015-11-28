@@ -21,5 +21,16 @@ A `Dockerfile` creates a container that includes `confd` and `aws-apigateway-imp
 * Build the Docker container with `compose build importer`
 * upload the API with `compose run importer`
 
-### Todo
-Enable the importer to allow for updating an existing api.
+## Updating an existing API
+
+```
+compose run importer --update --app-id=<app_id>
+```
+
+When in the API Gateway console you can find the APP_ID in the URL
+
+```
+https://console.aws.amazon.com/apigateway/home?region=us-east-1#/restapis/xwivffe5jh/resources/vcy1o1/methods/PUT
+```
+
+The APP_ID in the case is `xwivffe5jh`

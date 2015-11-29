@@ -684,3 +684,52 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /exchanges:
+    put:
+      description: |
+        Get Exchanges based on Code, Id, Region or Country
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              codes:
+                type: array
+                items:
+                  type: string
+              ids:
+                type: array
+                items:
+                  type: string
+              regions:
+                type: array
+                items:
+                  type: string
+              countries:
+                type: array
+                items:
+                  type: string
+              major:
+                type: boolean
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://exchanges.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

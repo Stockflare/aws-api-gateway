@@ -553,3 +553,134 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /sectors:
+    put:
+      description: |
+        Retrieve Sectors based on ID or code
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              ids:
+                type: string
+              codes:
+                type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /sectors/parent:
+    get:
+      description: |
+        Get parent sector for a Sector Code
+      parameters:
+        - name: code
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/parent
+        requestParameters:
+          integration.request.querystring.code: "method.request.querystring.code"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /sectors/siblings:
+    get:
+      description: |
+        Get siblings sectors for a Sector Code
+      parameters:
+        - name: code
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/siblings
+        requestParameters:
+          integration.request.querystring.code: "method.request.querystring.code"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+  /sectors/children:
+    get:
+      description: |
+        Get children sectors for a Sector Code
+      parameters:
+        - name: code
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/children
+        requestParameters:
+          integration.request.querystring.code: "method.request.querystring.code"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

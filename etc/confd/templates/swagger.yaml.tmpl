@@ -501,3 +501,55 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /currency:
+    get:
+      description: |
+        Currency Exchange rates
+      parameters:
+        - name: from
+          in: query
+          required: true
+          type: string
+        - name: to
+          in: query
+          required: false
+          type: string
+        - name: after
+          in: query
+          required: false
+          type: integer
+        - name: per_page
+          in: query
+          required: false
+          type: integer
+        - name: before
+          in: query
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://currency.api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.from: "method.request.querystring.from"
+          integration.request.querystring.to: "method.request.querystring.to"
+          integration.request.querystring.after: "method.request.querystring.after"
+          integration.request.querystring.per_page: "method.request.querystring.per_page"
+          integration.request.querystring.before: "method.request.querystring.before"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

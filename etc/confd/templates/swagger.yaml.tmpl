@@ -733,3 +733,45 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /alerts:
+    get:
+      description: |
+        Time-series based triggered security alerts
+      parameters:
+        - name: sic
+          in: query
+          required: true
+          type: string
+        - name: after
+          in: query
+          required: true
+          type: integer
+        - name: before
+          in: query
+          required: false
+          type: integer
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: array
+              items:
+                type: object
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://alerts.api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.sic: "method.request.querystring.sic"
+          integration.request.querystring.after: "method.request.querystring.after"
+          integration.request.querystring.before: "method.request.querystring.before"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:

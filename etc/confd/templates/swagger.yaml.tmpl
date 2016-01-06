@@ -775,3 +775,90 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+  /blocks:
+    put:
+      description: |
+        Create or update a block
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              watchlist_id:
+                type: string
+              ids:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://blocks.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "watchlist_id": $input.json('$.watchlist_id'),
+              "ids": $input.json('$.ids')
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Create or update a block
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              id:
+                type: string
+              watchlist_id:
+                type: string
+              sic:
+                type: string
+              quantity:
+                type: integer
+              price:
+                type: number
+              purchased:
+                type: integer
+      responses:
+        '201':
+          description: Block has been created
+        '403':
+          description: Block update made by wrong user
+        '400':
+          description: Block not found
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://blocks.api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "id": $input.json('$.id'),
+              "watchlist_id": $input.json('$.watchlist_id'),
+              "sic": $input.json('$.sic'),
+              "quantity": $input.json('$.quantity'),
+              "price": $input.json('$.price'),
+              "purchased": $input.json('$.purchased'),
+            }
+        responses:
+          default:
+            statusCode: "201"
+            responseTemplates:
+              application/json:

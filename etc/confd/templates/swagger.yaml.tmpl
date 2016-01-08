@@ -41,12 +41,18 @@ paths:
         requestTemplates:
           application/json:
         responses:
+          200:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseTemplates:
+              application/json:
           default:
             statusCode: "200"
             responseTemplates:
               application/json:
-          4\\d{2}:
-            statusCode: "403"
   /users/register:
     post:
       description: |
@@ -85,14 +91,22 @@ paths:
         requestTemplates:
           application/json:
         responses:
+          200:
+            statusCode: "200"
+            responseTemplates:
+              application/json:
+          409:
+            statusCode: "409"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseTemplates:
+              application/json:
           default:
             statusCode: "200"
             responseTemplates:
               application/json:
-          4\\d{2}:
-            statusCode: "409"
-          4\\d{2}:
-            statusCode: "400"
   /users/lost:
     get:
       description: |
@@ -794,6 +808,8 @@ paths:
       responses:
         '200':
           description: Successful response
+        '400':
+          description: No Found
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -812,6 +828,8 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
+          4\\d{2}:
+            statusCode: "400"
     post:
       description: |
         Create or update a block
@@ -835,7 +853,7 @@ paths:
                 type: integer
       responses:
         '201':
-          description: Block has been created
+          description: Block has been updated / created
         '403':
           description: Block update made by wrong user
         '400':
@@ -855,9 +873,21 @@ paths:
               "sic": $input.json('$.sic'),
               "quantity": $input.json('$.quantity'),
               "price": $input.json('$.price'),
-              "purchased": $input.json('$.purchased'),
+              "purchased": $input.json('$.purchased')
             }
         responses:
+          201:
+            statusCode: "201"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseTemplates:
+              application/json:
           default:
             statusCode: "201"
             responseTemplates:

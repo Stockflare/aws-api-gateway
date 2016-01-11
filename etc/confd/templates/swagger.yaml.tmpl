@@ -37,7 +37,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: post
-        uri: {{getenv "HTTP_PROTOCOL"}}://users.api.{{getenv "HOSTED_ZONE"}}/login
+        uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/login
         requestTemplates:
           application/json:
         responses:
@@ -87,7 +87,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: post
-        uri: {{getenv "HTTP_PROTOCOL"}}://users.api.{{getenv "HOSTED_ZONE"}}/register
+        uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/register
         requestTemplates:
           application/json:
         responses:
@@ -124,7 +124,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://users.api.{{getenv "HOSTED_ZONE"}}/lost
+        uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/lost
         requestParameters:
           integration.request.querystring.username: "method.request.querystring.username"
         requestTemplates:
@@ -160,7 +160,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:
@@ -195,7 +195,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: post
-        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json: |
             {
@@ -238,7 +238,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: delete
-        uri: {{getenv "HTTP_PROTOCOL"}}://directory.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://directory-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json: |
             {
@@ -283,7 +283,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/search
+        uri: {{getenv "HTTP_PROTOCOL"}}://search-api.{{getenv "HOSTED_ZONE"}}/search
         requestTemplates:
           application/json:
         responses:
@@ -322,7 +322,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/filter
+        uri: {{getenv "HTTP_PROTOCOL"}}://search-api.{{getenv "HOSTED_ZONE"}}/filter
         requestTemplates:
           application/json:
         responses:
@@ -357,7 +357,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://search.api.{{getenv "HOSTED_ZONE"}}/aggregate
+        uri: {{getenv "HTTP_PROTOCOL"}}://search-api.{{getenv "HOSTED_ZONE"}}/aggregate
         requestTemplates:
           application/json:
         responses:
@@ -387,7 +387,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://peers.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://peers-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
           integration.request.querystring.sic: "method.request.querystring.sic"
         requestTemplates:
@@ -425,7 +425,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://peers.api.{{getenv "HOSTED_ZONE"}}/aggregate
+        uri: {{getenv "HTTP_PROTOCOL"}}://peers-api.{{getenv "HOSTED_ZONE"}}/aggregate
         requestParameters:
           integration.request.querystring.sic: "method.request.querystring.sic"
           integration.request.querystring.type: "method.request.querystring.type"
@@ -470,7 +470,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://instruments.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://instruments-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:
@@ -511,7 +511,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://historical.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://historical-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:
@@ -557,7 +557,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://currency.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://currency-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
           integration.request.querystring.from: "method.request.querystring.from"
           integration.request.querystring.to: "method.request.querystring.to"
@@ -598,7 +598,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:
@@ -628,7 +628,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/parent
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors-api.{{getenv "HOSTED_ZONE"}}/parent
         requestParameters:
           integration.request.querystring.code: "method.request.querystring.code"
         requestTemplates:
@@ -660,7 +660,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/siblings
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors-api.{{getenv "HOSTED_ZONE"}}/siblings
         requestParameters:
           integration.request.querystring.code: "method.request.querystring.code"
         requestTemplates:
@@ -692,7 +692,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://sectors.api.{{getenv "HOSTED_ZONE"}}/children
+        uri: {{getenv "HTTP_PROTOCOL"}}://sectors-api.{{getenv "HOSTED_ZONE"}}/children
         requestParameters:
           integration.request.querystring.code: "method.request.querystring.code"
         requestTemplates:
@@ -743,7 +743,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://exchanges.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://exchanges-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:
@@ -781,7 +781,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://alerts.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://alerts-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
           integration.request.querystring.sic: "method.request.querystring.sic"
           integration.request.querystring.after: "method.request.querystring.after"
@@ -819,7 +819,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: put
-        uri: {{getenv "HTTP_PROTOCOL"}}://blocks.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://blocks-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json: |
             {
@@ -869,7 +869,7 @@ paths:
       x-amazon-apigateway-integration:
         type: http
         httpMethod: post
-        uri: {{getenv "HTTP_PROTOCOL"}}://blocks.api.{{getenv "HOSTED_ZONE"}}/
+        uri: {{getenv "HTTP_PROTOCOL"}}://blocks-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json: |
             {

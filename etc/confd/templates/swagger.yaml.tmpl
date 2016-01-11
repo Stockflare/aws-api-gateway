@@ -2,8 +2,8 @@ swagger: '2.0'
 info:
   version: 1.0.0
   title: 'Stockflare AWS API Gateway'
-produces:
-  - application.json
+  produces:
+    - application.json
 paths:
   /users/login:
     post:
@@ -207,10 +207,14 @@ paths:
             statusCode: "201"
             responseTemplates:
               application/json:
-          4\\d{2}:
+          403:
             statusCode: "403"
-          4\\d{2}:
-            statusCode: "401"
+            responseTemplates:
+              application/json:
+          409:
+            statusCode: "409"
+            responseTemplates:
+              application/json:
     delete:
       description: |
         Delete a set of proeprties for an identity
@@ -828,8 +832,10 @@ paths:
             statusCode: "200"
             responseTemplates:
               application/json:
-          4\\d{2}:
+          400:
             statusCode: "400"
+            responseTemplates:
+              application/json:
     post:
       description: |
         Create or update a block

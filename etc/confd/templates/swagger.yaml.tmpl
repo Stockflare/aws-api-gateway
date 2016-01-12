@@ -28,7 +28,13 @@ paths:
                 type: string
               expires:
                 type: integer
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '403':
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
           description: Invalid Login
       x-amazon-apigateway-auth:
         type: none
@@ -41,16 +47,47 @@ paths:
         responses:
           200:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /users/register:
     post:
       description: |
@@ -76,10 +113,19 @@ paths:
                 type: string
               expires:
                 type: integer
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '409':
           description: User logged in
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '400':
           description: Could not create user
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -91,20 +137,53 @@ paths:
         responses:
           200:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           409:
             statusCode: "409"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /users/lost:
     get:
       description: |
@@ -117,6 +196,9 @@ paths:
       responses:
         '200':
           description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -130,8 +212,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /directory:
     put:
       description: |
@@ -153,6 +262,9 @@ paths:
       responses:
         '200':
           description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -164,6 +276,8 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
     post:
@@ -182,10 +296,19 @@ paths:
       responses:
         '201':
           description: All properties for the identity have been created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '403':
           description: An attempt to update a locked property for the identity was made
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '409':
           description: A duplicate entry for a property exists within the directory already
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -201,14 +324,20 @@ paths:
         responses:
           default:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           409:
             statusCode: "409"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
     delete:
@@ -229,6 +358,9 @@ paths:
       responses:
         '200':
           description: All keys for the identity have been deleted
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -244,8 +376,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,DELETE,POST,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /search:
     put:
       description: |
@@ -274,6 +433,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -285,8 +447,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /search/filter:
     put:
       description: |
@@ -313,6 +502,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -324,8 +516,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /search/aggregate:
     put:
       description: |
@@ -348,6 +567,9 @@ paths:
           schema:
             properties:
               type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -359,8 +581,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /peers:
     get:
       description: |
@@ -378,6 +627,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -391,8 +643,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /peers/aggregate:
     get:
       description: |
@@ -416,6 +695,9 @@ paths:
           schema:
             properties:
               type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -431,8 +713,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /instruments:
     put:
       description: |
@@ -461,6 +770,9 @@ paths:
           schema:
             properties:
               type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -472,8 +784,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /historical:
     put:
       description: |
@@ -502,6 +841,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -513,8 +855,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /currency:
     get:
       description: |
@@ -548,6 +917,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -565,8 +937,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /sectors:
     put:
       description: |
@@ -589,6 +988,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -600,8 +1002,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /sectors/parent:
     get:
       description: |
@@ -619,6 +1048,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -632,8 +1064,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /sectors/siblings:
     get:
       description: |
@@ -651,6 +1110,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -664,8 +1126,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /sectors/children:
     get:
       description: |
@@ -683,6 +1172,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -696,8 +1188,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /exchanges:
     put:
       description: |
@@ -734,6 +1253,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -745,8 +1267,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /alerts:
     get:
       description: |
@@ -772,6 +1321,9 @@ paths:
               type: array
               items:
                 type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -787,8 +1339,35 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /blocks:
     put:
       description: |
@@ -808,8 +1387,14 @@ paths:
       responses:
         '200':
           description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '400':
           description: No Found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -826,10 +1411,14 @@ paths:
         responses:
           default:
             statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
     post:
@@ -856,10 +1445,19 @@ paths:
       responses:
         '201':
           description: Block has been updated / created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '403':
           description: Block update made by wrong user
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '400':
           description: Block not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -880,20 +1478,53 @@ paths:
         responses:
           201:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           default:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /blocks/properties:
     post:
       description: |
@@ -911,10 +1542,19 @@ paths:
       responses:
         '201':
           description: Block properties has been updated / created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '403':
           description: Block update made by wrong user
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '400':
           description: Block not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
       x-amazon-apigateway-integration:
@@ -931,17 +1571,50 @@ paths:
         responses:
           201:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
           default:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"

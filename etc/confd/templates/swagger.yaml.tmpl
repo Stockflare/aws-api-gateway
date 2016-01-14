@@ -630,6 +630,11 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+        '400':
+          description: Bad request - Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -641,76 +646,12 @@ paths:
         requestTemplates:
           application/json:
         responses:
-          default:
-            statusCode: "200"
+          400:
+            statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
-    options:
-      parameters: []
-      responses:
-        200:
-          description: "200 response"
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-            Access-Control-Allow-Methods:
-              type: "string"
-            Access-Control-Allow-Headers:
-              type: "string"
-      x-amazon-apigateway-integration:
-        responses:
-          default:
-            statusCode: "200"
-            responseParameters:
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
-              method.response.header.Access-Control-Allow-Origin: "'*'"
-            responseTemplates:
-              application/json: "__passthrough__"
-        requestTemplates:
-          application/json: "{\"statusCode\": 200}"
-        type: "mock"
-  /peers/aggregate:
-    get:
-      description: |
-        Aggregate a field for all peers of a SIC
-      parameters:
-        - name: sic
-          in: query
-          required: true
-          type: string
-        - name: type
-          in: query
-          required: true
-          type: string
-        - name: field
-          in: query
-          required: true
-          type: string
-      responses:
-        '200':
-          description: Successful response
-          schema:
-            properties:
-              type: object
-          headers:
-            Access-Control-Allow-Origin:
-              type: "string"
-      x-amazon-apigateway-auth:
-        type: none
-      x-amazon-apigateway-integration:
-        type: http
-        httpMethod: get
-        uri: {{getenv "HTTP_PROTOCOL"}}://peers-api.{{getenv "HOSTED_ZONE"}}/aggregate
-        requestParameters:
-          integration.request.querystring.sic: "method.request.querystring.sic"
-          integration.request.querystring.type: "method.request.querystring.type"
-          integration.request.querystring.field: "method.request.querystring.field"
-        requestTemplates:
-          application/json:
-        responses:
           default:
             statusCode: "200"
             responseParameters:
@@ -1561,6 +1502,238 @@ paths:
         type: http
         httpMethod: post
         uri: {{getenv "HTTP_PROTOCOL"}}://blocks-api.{{getenv "HOSTED_ZONE"}}/properties
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "id": $input.json('$.id'),
+              "properties": $input.json('$.properties')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /portfolios:
+    put:
+      description: |
+        Create or update a portfolio
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              ids:
+                type: array
+                items:
+                  type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: No Found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://portfolios-api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "ids": $input.json('$.ids')
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Create a portfolios
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              type:
+                type: string
+      responses:
+        '201':
+          description: portfolio has been updated / created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: portfolio update made by wrong user
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: portfolio not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://portfolios-api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "type": $input.json('$.type')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /portfolios/properties:
+    post:
+      description: |
+        Create or update portfolio properties
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              id:
+                type: string
+              properties:
+                type: object
+      responses:
+        '201':
+          description: portfolios properties has been updated / created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: portfolios update made by wrong user
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: portfolios not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://portfolios-api.{{getenv "HOSTED_ZONE"}}/properties
         requestTemplates:
           application/json: |
             {

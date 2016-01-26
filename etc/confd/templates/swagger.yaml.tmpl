@@ -28,6 +28,8 @@ paths:
                 type: string
               expires:
                 type: integer
+              refresh_token:
+                type: object
           headers:
             Access-Control-Allow-Origin:
               type: "string"
@@ -91,14 +93,14 @@ paths:
   /users/refresh:
     post:
       description: |
-        Login with users valid token to get a refreshed token
+        Login with a refresh token
       parameters:
         - name: body
           in: body
-          required: false
+          required: true
           schema:
             properties:
-              identity:
+              token:
                 type: string
       responses:
         '200':
@@ -111,6 +113,8 @@ paths:
                 type: string
               expires:
                 type: integer
+              refresh_token:
+                type: object
           headers:
             Access-Control-Allow-Origin:
               type: "string"
@@ -120,16 +124,13 @@ paths:
               type: "string"
           description: Invalid Login
       x-amazon-apigateway-auth:
-        type: aws_iam
+        type: none
       x-amazon-apigateway-integration:
         type: http
         httpMethod: post
         uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/refresh
         requestTemplates:
-          application/json: |
-            {
-              "identity": "$context.identity.cognitoIdentityId"
-            }
+          application/json:
         responses:
           200:
             statusCode: "200"
@@ -199,6 +200,8 @@ paths:
                 type: string
               expires:
                 type: integer
+              refresh_token:
+                type: object
           headers:
             Access-Control-Allow-Origin:
               type: "string"
@@ -1815,6 +1818,66 @@ paths:
               application/json:
           default:
             statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    delete:
+      description: |
+        Delete a portfolio
+      parameters:
+        - name: id
+          in: query
+          required: true
+          type: string
+        - name: identity
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://portfolios-api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.id: "method.request.querystring.id"
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:

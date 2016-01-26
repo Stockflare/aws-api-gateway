@@ -81,7 +81,93 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /users/refresh:
+    post:
+      description: |
+        Login with users valid token to get a refreshed token
+      parameters:
+        - name: body
+          in: body
+          required: false
+          schema:
+            properties:
+              identity:
+                type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              identity:
+                type: string
+              token:
+                type: string
+              expires:
+                type: integer
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+          description: Invalid Login
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/refresh
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -177,7 +263,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -234,7 +320,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -398,7 +484,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,DELETE,POST,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -469,7 +555,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -538,7 +624,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -603,7 +689,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -676,7 +762,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -747,7 +833,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -818,7 +904,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -900,7 +986,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -965,7 +1051,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1027,7 +1113,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1089,7 +1175,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1151,7 +1237,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1230,7 +1316,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1302,7 +1388,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1441,6 +1527,66 @@ paths:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json:
+    delete:
+      description: |
+        Delete a block
+      parameters:
+        - name: id
+          in: query
+          required: true
+          type: string
+        - name: identity
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://blocks-api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.id: "method.request.querystring.id"
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
     options:
       parameters: []
       responses:
@@ -1458,8 +1604,8 @@ paths:
           default:
             statusCode: "200"
             responseParameters:
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1552,7 +1698,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1691,7 +1837,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -1784,7 +1930,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"

@@ -15,8 +15,7 @@ WORKDIR /app
 
 RUN mvn assembly:assembly \
     && mv build/maven/aws-apigateway-*-jar-with-dependencies.jar /aws-apigateway-importer.jar \
-    && mvn clean \
-    && rm -rf /app ~/.m2
+    && mvn clean
 
 VOLUME ["/root/.aws"]
 VOLUME ["/data"]

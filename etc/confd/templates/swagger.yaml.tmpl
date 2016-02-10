@@ -674,6 +674,22 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Api-Total:
+              type: "string"
+            X-Api-Count:
+              type: "string"
+            X-Api-Current:
+              type: "string"
+            X-Api-Next:
+              type: "string"
+            X-Api-Pages:
+              type: "string"
+            X-Api-Per-Page:
+              type: "string"
+            X-Api-Previous:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -687,6 +703,14 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Api-Total,X-Api-Count,X-Api-Current,X-Api-Next,X-Api-Pages,X-Api-Per-Page,X-Api-Previous'"
+              method.response.header.X-Api-Total: "integration.response.header.x-api-total"
+              method.response.header.X-Api-Count: "integration.response.header.x-api-count"
+              method.response.header.X-Api-Current: "integration.response.header.x-api-current"
+              method.response.header.X-Api-Next: "integration.response.header.x-api-next"
+              method.response.header.X-Api-Pages: "integration.response.header.x-api-pages"
+              method.response.header.X-Api-Per-Page: "integration.response.header.x-api-per-page"
+              method.response.header.X-Api-Previous: "integration.response.header.x-api-previous"
             responseTemplates:
               application/json:
     options:
@@ -707,7 +731,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Api-Total,X-Api-Count,X-Api-Current,X-Api-Next,X-Api-Pages,X-Api-Per-Page,X-Api-Previous'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -743,6 +767,22 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Api-Total:
+              type: "string"
+            X-Api-Count:
+              type: "string"
+            X-Api-Current:
+              type: "string"
+            X-Api-Next:
+              type: "string"
+            X-Api-Pages:
+              type: "string"
+            X-Api-Per-Page:
+              type: "string"
+            X-Api-Previous:
+              type: "string"
       x-amazon-apigateway-auth:
         type: none
       x-amazon-apigateway-integration:
@@ -756,6 +796,14 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Api-Total,X-Api-Count,X-Api-Current,X-Api-Next,X-Api-Pages,X-Api-Per-Page,X-Api-Previous'"
+              method.response.header.X-Api-Total: "integration.response.header.x-api-total"
+              method.response.header.X-Api-Count: "integration.response.header.x-api-count"
+              method.response.header.X-Api-Current: "integration.response.header.x-api-current"
+              method.response.header.X-Api-Next: "integration.response.header.x-api-next"
+              method.response.header.X-Api-Pages: "integration.response.header.x-api-pages"
+              method.response.header.X-Api-Per-Page: "integration.response.header.x-api-per-page"
+              method.response.header.X-Api-Previous: "integration.response.header.x-api-previous"
             responseTemplates:
               application/json:
     options:
@@ -776,7 +824,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
-              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Api-Total,X-Api-Count,X-Api-Current,X-Api-Next,X-Api-Pages,X-Api-Per-Page,X-Api-Previous'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
               application/json: "__passthrough__"
@@ -2175,6 +2223,59 @@ paths:
         uri: {{getenv "HTTP_PROTOCOL"}}://price-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
           integration.request.querystring.rics: "method.request.querystring.rics"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /fx:
+    get:
+      description: |
+        Get Exchange Rate
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://fx-api.{{getenv "HOSTED_ZONE"}}/
         requestTemplates:
           application/json:
         responses:

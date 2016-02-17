@@ -376,6 +376,98 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /users/change:
+    post:
+      description: |
+        Change user details
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              username:
+                type: object
+              password:
+                type: object
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              identity:
+                type: string
+              username:
+                type: string
+              token:
+                type: string
+              expires:
+                type: integer
+              refresh_token:
+                type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+          description: Invalid Login
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/change
+        requestTemplates:
+          application/json:
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /users/lost:
     get:
       description: |

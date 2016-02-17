@@ -377,7 +377,7 @@ paths:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
   /users/change:
-    post:
+    put:
       description: |
         Change user details
       parameters:
@@ -417,7 +417,7 @@ paths:
         type: none
       x-amazon-apigateway-integration:
         type: http
-        httpMethod: post
+        httpMethod: put
         uri: {{getenv "HTTP_PROTOCOL"}}://users-api.{{getenv "HOSTED_ZONE"}}/change
         requestTemplates:
           application/json:
@@ -460,7 +460,7 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Max-Age: "'180'"
-              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:

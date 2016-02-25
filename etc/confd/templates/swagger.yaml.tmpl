@@ -2737,6 +2737,228 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /trade/user/login:
+    post:
+      description: |
+        Login to a trading account
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              broker:
+                type: string
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        '201':
+          description: Valid login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/user/login
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "broker": $input.json('$.broker'),
+              "username": $input.json('$.username'),
+              "password": $input.json('$.password')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /trade/user/refresh:
+    post:
+      description: |
+        Refresh and keep alive session token
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+      responses:
+        '201':
+          description: Refreshed or noop
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/user/refresh
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "token": $input.json('$.token')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
 securityDefinitions:
   api_key:
     type: "apiKey"

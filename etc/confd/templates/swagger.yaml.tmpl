@@ -4129,6 +4129,220 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /i18n:
+    get:
+      description: |
+        Get internationalizations
+      parameters:
+        - name: locale
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://i18n-api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.locale: "method.request.querystring.locale"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /explore:
+    get:
+      description: |
+        Retrieve an exhaustive list of all explore categories
+      parameters:
+        - name: identity
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://explore-api.{{getenv "HOSTED_ZONE"}}/
+        requestParameters:
+          integration.request.querystring.identity: "method.request.querystring.identity"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Create an explore category
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              conditions:
+                type: object
+      responses:
+        '200':
+          description: Category for the identity have been created
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://explore-api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "conditions": $input.json('$.conditions')
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    delete:
+      description: |
+        Delete explore category for an indetity
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              uuid:
+                type: string
+      responses:
+        '200':
+          description: Category has been deleted
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://explore-api.{{getenv "HOSTED_ZONE"}}/
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "uuid": $input.json('$.uuid')
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
 securityDefinitions:
   api_key:
     type: "apiKey"

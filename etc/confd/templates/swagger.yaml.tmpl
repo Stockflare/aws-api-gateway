@@ -2829,6 +2829,11 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+        '400':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -2857,6 +2862,12 @@ paths:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
@@ -3323,6 +3334,17 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+        '400':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3362,6 +3384,15 @@ paths:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
               method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
@@ -3895,6 +3926,17 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+        '400':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3941,6 +3983,15 @@ paths:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
               method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
@@ -4037,6 +4088,17 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+        '400':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -4076,6 +4138,15 @@ paths:
               application/json:
           403:
             statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
               method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"

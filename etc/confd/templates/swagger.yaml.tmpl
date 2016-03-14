@@ -3063,6 +3063,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '403':
           description: Invlaid Login
           headers:
@@ -3074,6 +3076,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3084,6 +3088,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
@@ -3103,36 +3109,40 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           500:
             statusCode: "500"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
     options:
@@ -3613,6 +3623,8 @@ paths:
               type: "string"
             X-Previous-Page:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '403':
           description: Invlaid Login
           headers:
@@ -3630,6 +3642,8 @@ paths:
               type: "string"
             X-Previous-Page:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3646,6 +3660,8 @@ paths:
             X-Next-Page:
               type: "string"
             X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
@@ -3668,48 +3684,52 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
               method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
               method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
               method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
               method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
               method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
               method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           500:
             statusCode: "500"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
               method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
               method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
               method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
               method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
               method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
               method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
     options:
@@ -3768,6 +3788,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '403':
           description: Invlaid Login
           headers:
@@ -3779,6 +3801,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3789,6 +3813,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
@@ -3809,36 +3835,40 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           500:
             statusCode: "500"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
     options:
@@ -3915,6 +3945,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '403':
           description: Invlaid Login
           headers:
@@ -3925,6 +3957,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
         '400':
           description: Invlaid Login
@@ -3937,6 +3971,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -3947,6 +3983,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
@@ -3976,45 +4014,50 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           500:
             statusCode: "500"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
     options:
@@ -4077,6 +4120,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '403':
           description: Invlaid Login
           headers:
@@ -4087,6 +4132,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
         '400':
           description: Invlaid Login
@@ -4099,6 +4146,8 @@ paths:
               type: "string"
             X-Session-TTL:
               type: "string"
+            X-Replay-Nonce:
+              type: "string"
         '500':
           description: Failure
           headers:
@@ -4109,6 +4158,8 @@ paths:
             X-Session-Refreshed:
               type: "string"
             X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
               type: "string"
       x-amazon-apigateway-auth:
         type: aws_iam
@@ -4131,45 +4182,50 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           403:
             statusCode: "403"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           400:
             statusCode: "400"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           500:
             statusCode: "500"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
           default:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
-              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
               method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
               application/json:
     options:

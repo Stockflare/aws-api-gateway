@@ -3370,6 +3370,8 @@ paths:
             properties:
               broker:
                 type: string
+              username:
+                type: string
               token:
                 type: string
               answer:
@@ -3430,6 +3432,7 @@ paths:
             {
               "identity": "$context.identity.cognitoIdentityId",
               "broker": $input.json('$.broker'),
+              "username": $input.json('$.username'),
               "token": $input.json('$.token'),
               "answer": $input.json('$.answer')
             }

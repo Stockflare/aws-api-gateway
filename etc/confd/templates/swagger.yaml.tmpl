@@ -3784,7 +3784,7 @@ paths:
           required: true
           schema:
             properties:
-              token:
+              broker:
                 type: string
               account:
                 type: string
@@ -3860,7 +3860,7 @@ paths:
           application/json: |
             {
               "identity": "$context.identity.cognitoIdentityId",
-              "token": $input.json('$.token'),
+              "broker": $input.json('$.broker'),
               "account": $input.json('$.account'),
               "page": $input.json('$.page'),
               "per_page": $input.json('$.per_page')

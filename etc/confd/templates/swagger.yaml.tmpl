@@ -3655,7 +3655,7 @@ paths:
           required: true
           schema:
             properties:
-              token:
+              broker:
                 type: string
       responses:
         '200':
@@ -3701,7 +3701,7 @@ paths:
           application/json: |
             {
               "identity": "$context.identity.cognitoIdentityId",
-              "token": $input.json('$.token')
+              "broker": $input.json('$.broker')
             }
         requestParameters:
           integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"

@@ -2567,7 +2567,7 @@ paths:
       description: |
         Price quote system
       parameters:
-        - name: rics
+        - name: symbols
           in: query
           required: true
           type: string
@@ -2587,7 +2587,7 @@ paths:
         httpMethod: get
         uri: {{getenv "HTTP_PROTOCOL"}}://price-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
-          integration.request.querystring.rics: "method.request.querystring.rics"
+          integration.request.querystring.symbols: "method.request.querystring.symbols"
         requestTemplates:
           application/json:
         responses:

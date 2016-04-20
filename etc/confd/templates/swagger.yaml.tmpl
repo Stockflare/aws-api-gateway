@@ -2580,6 +2580,11 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
       security:
       - api_key: []
       x-amazon-apigateway-integration:
@@ -2588,6 +2593,90 @@ paths:
         uri: {{getenv "HTTP_PROTOCOL"}}://price-api.{{getenv "HOSTED_ZONE"}}/
         requestParameters:
           integration.request.querystring.symbols: "method.request.querystring.symbols"
+        requestTemplates:
+          application/json:
+        responses:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /price/history:
+    get:
+      description: |
+        Price history system
+      parameters:
+        - name: symbol
+          in: query
+          required: true
+          type: string
+        - name: before
+          in: query
+          required: false
+          type: integer
+        - name: after
+          in: query
+          required: false
+          type: integer
+        - name: metric
+          in: query
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          schema:
+            properties:
+              type: object
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      security:
+      - api_key: []
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://price-api.{{getenv "HOSTED_ZONE"}}/history
+        requestParameters:
+          integration.request.querystring.symbol: "method.request.querystring.symbol"
+          integration.request.querystring.before: "method.request.querystring.before"
+          integration.request.querystring.after: "method.request.querystring.after"
+          integration.request.querystring.metric: "method.request.querystring.metric"
         requestTemplates:
           application/json:
         responses:

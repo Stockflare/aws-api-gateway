@@ -4524,6 +4524,8 @@ paths:
                 type: string
               account:
                 type: string
+              price:
+                type: number
       responses:
         '200':
           description: Order exeuted
@@ -4589,7 +4591,8 @@ paths:
               "identity": "$context.identity.cognitoIdentityId",
               "token": $input.json('$.token'),
               "broker": $input.json('$.broker'),
-              "account": $input.json('$.account')
+              "account": $input.json('$.account'),
+              "price": $input.json('$.price')
             }
         requestParameters:
           integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"

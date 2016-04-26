@@ -3315,6 +3315,148 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /trade/user/account/refresh:
+    put:
+      description: |
+        Refresh status of an account
+      parameters:
+        - name: "X-Replay-Nonce"
+          in: "header"
+          required: false
+          type: "string"
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+              account:
+                type: string
+      responses:
+        '200':
+          description: Got accounts
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/user/account/refresh
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "token": $input.json('$.token'),
+              "account": $input.json('$.account')
+            }
+        requestParameters:
+          integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
   /trade/user/links:
     put:
       description: |
@@ -3852,6 +3994,353 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Max-Age: "'180'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /trade/order/refresh:
+    put:
+      description: |
+        Refresh all orders for account
+      parameters:
+        - name: "X-Replay-Nonce"
+          in: "header"
+          required: false
+          type: "string"
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+              account:
+                type: string
+      responses:
+        '200':
+          description: Got linked accounts
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/order/refresh
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "token": $input.json('$.token'),
+              "account": $input.json('$.account')
+            }
+        requestParameters:
+          integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /trade/order/status:
+    put:
+      description: |
+        Refresh a single order
+      parameters:
+        - name: "X-Replay-Nonce"
+          in: "header"
+          required: false
+          type: "string"
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+              account:
+                type: string
+              uuid:
+                type: string
+      responses:
+        '200':
+          description: Got linked accounts
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/order/status
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "token": $input.json('$.token'),
+              "account": $input.json('$.account'),
+              "uuid": $input.json('$.uuid')
+            }
+        requestParameters:
+          integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:
@@ -4668,6 +5157,181 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Max-Age: "'180'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /trade/order/cancel:
+    delete:
+      description: |
+        Cancel an order
+      parameters:
+        - name: "X-Replay-Nonce"
+          in: "header"
+          required: false
+          type: "string"
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              token:
+                type: string
+              account:
+                type: string
+              uuid:
+                type: string
+      responses:
+        '200':
+          description: Got linked accounts
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '403':
+          description: Invlaid Login
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+        '500':
+          description: Failure
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Session-Refreshed:
+              type: "string"
+            X-Session-TTL:
+              type: "string"
+            X-Total-Pages:
+              type: "string"
+            X-Next-Page:
+              type: "string"
+            X-Previous-Page:
+              type: "string"
+            X-Replay-Nonce:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://trade-api.{{getenv "HOSTED_ZONE"}}/order/cancel
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "token": $input.json('$.token'),
+              "account": $input.json('$.account'),
+              "uuid": $input.json('$.uuid')
+            }
+        requestParameters:
+          integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce,X-Total-Pages,X-Next-Page,X-Previous-Page'"
+              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
+              method.response.header.X-Total-Pages: "integration.response.header.X-Total-Pages"
+              method.response.header.X-Next-Page: "integration.response.header.X-Next-Page"
+              method.response.header.X-Previous-Page: "integration.response.header.X-Previous-Page"
+              method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,DELETE'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token,X-Session-TTL,X-Session-Refreshed,X-Replay-Nonce'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:

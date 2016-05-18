@@ -4684,6 +4684,8 @@ paths:
             properties:
               token:
                 type: string
+              account:
+                type: string
       responses:
         '200':
           description: Got Orders
@@ -4734,7 +4736,8 @@ paths:
           application/json: |
             {
               "identity": "$context.identity.cognitoIdentityId",
-              "token": $input.json('$.token')
+              "token": $input.json('$.token'),
+              "account": $input.json('$.account')
             }
         requestParameters:
           integration.request.header.X-Replay-Nonce: "method.request.header.X-Replay-Nonce"
@@ -4764,7 +4767,7 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
               method.response.header.Access-Control-Expose-Headers: "'X-Session-Refreshed,X-Session-TTL,X-Replay-Nonce'"
-              method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
+              # method.response.header.X-Session-Refreshed: "integration.response.header.X-Session-Refreshed"
               method.response.header.X-Session-TTL: "integration.response.header.X-Session-TTL"
               method.response.header.X-Replay-Nonce: "integration.response.header.X-Replay-Nonce"
             responseTemplates:
@@ -5950,6 +5953,410 @@ paths:
             responseParameters:
               method.response.header.Access-Control-Max-Age: "'180'"
               method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /payments/stripe/customer:
+    put:
+      description: |
+        Get customer details
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            properties:
+              foo:
+                type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: No Found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '404':
+          description: No Found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://payments-api.{{getenv "HOSTED_ZONE"}}/stripe/customer
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Subscribe customer to a free trial
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            plan:
+              type:
+                type: string
+            username:
+              type:
+                type: string
+      responses:
+        '201':
+          description: Subscribed
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://payments-api.{{getenv "HOSTED_ZONE"}}/stripe/customer
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "plan": $input.json('$.plan'),
+              "username": $input.json('$.username')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    delete:
+      description: |
+        Cancel a customer subscription
+      parameters:
+        - name: plan
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://payments-api.{{getenv "HOSTED_ZONE"}}/stripe/customer
+        requestParameters:
+          integration.request.querystring.plan: "method.request.querystring.plan"
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /payments/stripe/upgrade:
+    post:
+      description: |
+        Subscribe customer to a paid plan
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            plan:
+              type:
+                type: string
+            source:
+              type:
+                type: string
+      responses:
+        '201':
+          description: Subscribed
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://payments-api.{{getenv "HOSTED_ZONE"}}/stripe/upgrade
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "plan": $input.json('$.plan'),
+              "source": $input.json('$.source')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,POST'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
+  /payments/stripe/plans:
+    get:
+      description: |
+        Get available subscription plans
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://payments-api.{{getenv "HOSTED_ZONE"}}/stripe/plans
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
               method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
               method.response.header.Access-Control-Allow-Origin: "'*'"
             responseTemplates:

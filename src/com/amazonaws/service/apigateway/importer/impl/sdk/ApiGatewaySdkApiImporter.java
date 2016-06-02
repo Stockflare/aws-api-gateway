@@ -25,15 +25,18 @@ import com.amazonaws.services.apigateway.model.NotFoundException;
 import com.amazonaws.services.apigateway.model.Resource;
 import com.amazonaws.services.apigateway.model.Resources;
 import com.amazonaws.services.apigateway.model.RestApi;
+import com.google.common.util.concurrent.RateLimiter;
 import com.google.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.amazonaws.service.apigateway.importer.util.PatchUtils.createPatchDocument;
 import static com.amazonaws.service.apigateway.importer.util.PatchUtils.createReplaceOperation;
@@ -44,6 +47,9 @@ public class ApiGatewaySdkApiImporter {
 
     @Inject
     protected ApiGateway apiGateway;
+
+    // keep track of the models created/updated from the definition file. Any orphaned models left in the API will be deleted
+    protected HashSet<String> processedModels = new HashSet<>();
 
     public void deleteApi(String apiId) {
         deleteApi(apiGateway.getRestApiById(apiId));
@@ -86,13 +92,18 @@ public class ApiGatewaySdkApiImporter {
         return Optional.empty();
     }
 
+    // todo: optimize number of calls to this as it is an expensive operation
     protected List<Resource> buildResourceList(RestApi api) {
         List<Resource> resourceList = new ArrayList<>();
 
         Resources resources = api.getResources();
         resourceList.addAll(resources.getItem());
 
+        LOG.debug("Building list of resources. Stack trace: ", new Throwable());
+
+        final RateLimiter rl = RateLimiter.create(2);
         while (resources._isLinkAvailable("next")) {
+            rl.acquire();
             resources = resources.getNext();
             resourceList.addAll(resources.getItem());
         }
@@ -129,6 +140,8 @@ public class ApiGatewaySdkApiImporter {
     }
 
     protected void createModel(RestApi api, String modelName, String description, String schema, String modelContentType) {
+        this.processedModels.add(modelName);
+
         CreateModelInput input = new CreateModelInput();
 
         input.setName(modelName);
@@ -139,15 +152,24 @@ public class ApiGatewaySdkApiImporter {
         api.createModel(input);
     }
 
+    protected void updateModel(RestApi api, String modelName, String schema) {
+        this.processedModels.add(modelName);
+
+        api.getModelByName(modelName).updateModel(createPatchDocument(createReplaceOperation("/schema", schema)));
+    }
+
     protected void cleanupModels(RestApi api, Set<String> models) {
-        buildModelList(api).stream().filter(model -> !models.contains(model.getName())).forEach(model -> {
+        List<Model> existingModels = buildModelList(api);
+        Stream<Model> modelsToDelete = existingModels.stream().filter(model -> !models.contains(model.getName()));
+
+        modelsToDelete.forEach(model -> {
             LOG.info("Removing deleted model " + model.getName());
             model.deleteModel();
         });
     }
 
-    protected Optional<Resource> getResource(RestApi api, String parentResourceId, String pathPart) {
-        for (Resource r : buildResourceList(api)) {
+    protected Optional<Resource> getResource(String parentResourceId, String pathPart, List<Resource> resources) {
+        for (Resource r : resources) {
             if (pathEquals(pathPart, r.getPathPart()) && r.getParentId().equals(parentResourceId)) {
                 return Optional.of(r);
             }
@@ -175,10 +197,6 @@ public class ApiGatewaySdkApiImporter {
         } catch (Exception ignored) {
             return Optional.empty();
         }
-    }
-
-    protected void updateModel(RestApi api, String modelName, String schema) {
-        api.getModelByName(modelName).updateModel(createPatchDocument(createReplaceOperation("/schema", schema)));
     }
 
     protected boolean methodExists(Resource resource, String httpMethod) {
@@ -220,17 +238,23 @@ public class ApiGatewaySdkApiImporter {
         return StringUtils.removeEnd(StringUtils.removeStart(path, "/"), "/");
     }
 
-    protected Resource createResource(RestApi api, String parentResourceId, String part) {
-        final Optional<Resource> existingResource = getResource(api, parentResourceId, part);
+    protected Resource createResource(RestApi api, String parentResourceId, String part, List<Resource> resources) {
+        final Optional<Resource> existingResource = getResource(parentResourceId, part, resources);
 
         // create resource if doesn't exist
         if (!existingResource.isPresent()) {
+
             LOG.info("Creating resource '" + part + "' on " + parentResourceId);
 
             CreateResourceInput input = new CreateResourceInput();
             input.setPathPart(part);
             Resource resource = api.getResourceById(parentResourceId);
-            return resource.createResource(input);
+
+            Resource created = resource.createResource(input);
+
+            resources.add(created);
+
+            return created;
         } else {
             return existingResource.get();
         }

@@ -76,6 +76,8 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         // TODO: What to use as description?
         final RestApi api = createApi(getApiName(raml, name), null);
 
+        LOG.info("Created API "+api.getId());
+        
         try {
             final Resource rootResource = getRootResource(api).get();
             deleteDefaultModels(api);
@@ -166,8 +168,10 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
 
         Resource parentResource = resource;
 
+        List<Resource> resources = buildResourceList(api);
+
         for (int i = 1; i < parts.length; i++) {
-            parentResource = createResource(api, parentResource.getId(), parts[i]);
+            parentResource = createResource(api, parentResource.getId(), parts[i], resources);
 
             paths.add(parentResource.getPath());
         }
@@ -181,11 +185,11 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         }
 
         if (update) {
-            cleanupMethods(api, resource, actions);
+            cleanupMethods(resource, actions);
         }
     }
 
-    private void cleanupMethods (RestApi api, Resource resource, Map<ActionType, Action> actions) {
+    private void cleanupMethods (Resource resource, Map<ActionType, Action> actions) {
         final HashSet<String> methods = new HashSet<>();
 
         for (ActionType action : actions.keySet()) {
@@ -228,7 +232,7 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
                 }
             }
 
-            cleanupMethodModels(api, method, action.getBody());
+            cleanupMethodModels(method, action.getBody());
         } else {
             LOG.info(format("Creating method for api id %s and resource id %s with method %s", api.getId(), resource.getId(), httpMethod));
 
@@ -253,8 +257,6 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
             method = resource.putMethod(input, httpMethod.toString());
         }
 
-        createIntegration(resource, method, this.config);
-
         for (Map.Entry<String, UriParameter> entry : action.getResource().getUriParameters().entrySet()) {
             updateMethod(api, method, "path", entry.getKey(), entry.getValue().isRequired());
         }
@@ -268,10 +270,12 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         }
 
         if (update) {
-            cleanupMethod(api, method, "path", action.getResource().getUriParameters().keySet());
-            cleanupMethod(api, method, "header", action.getHeaders().keySet());
-            cleanupMethod(api, method, "querystring", action.getQueryParameters().keySet());
+            cleanupMethod(method, "path", action.getResource().getUriParameters().keySet());
+            cleanupMethod(method, "header", action.getHeaders().keySet());
+            cleanupMethod(method, "querystring", action.getQueryParameters().keySet());
         }
+
+        createIntegration(resource, method, this.config);
 
         createMethodResponses(api, method, action.getResponses(), update);
     }
@@ -370,7 +374,7 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         return map;
     }
 
-    private void cleanupMethodModels(RestApi api, Method method, Map<String, MimeType> body) {
+    private void cleanupMethodModels(Method method, Map<String, MimeType> body) {
         if (method.getRequestModels() != null) {
             for (Map.Entry<String, String> entry : method.getRequestModels().entrySet()) {
                 if (!body.containsKey(entry.getKey()) || body.get(entry.getKey()).getSchema() == null) {
@@ -382,7 +386,7 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         }
     }
 
-    private void cleanupMethod(RestApi api, Method method, String type, Set<String> parameterSet) {
+    private void cleanupMethod(Method method, String type, Set<String> parameterSet) {
         if (method.getRequestParameters() != null) {
             method.getRequestParameters().keySet().forEach(key -> {
                 final String[] parts = key.split("\\.");
@@ -396,7 +400,7 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         }
     }
 
-    private String generateModelName(MimeType mimeType) {
+    private String generateModelName() {
         return "model" + UUID.randomUUID().toString().substring(0, 8);
     }
 
@@ -406,11 +410,11 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
         }
 
         if (update) {
-            cleanupMethodResponses(api, method, responses);
+            cleanupMethodResponses(method, responses);
         }
     }
 
-    private void cleanupMethodResponses(RestApi api, Method method, Map<String, Response> responses) {
+    private void cleanupMethodResponses(Method method, Map<String, Response> responses) {
         method.getMethodResponses().entrySet().forEach(entry -> {
             if (!responses.containsKey(entry.getKey())) {
                 entry.getValue().deleteMethodResponse();
@@ -458,7 +462,7 @@ public class ApiGatewaySdkRamlApiImporter extends ApiGatewaySdkApiImporter imple
                 return schema;
             }
 
-            final String modelName = generateModelName(mimeType);
+            final String modelName = generateModelName();
 
             models.add(modelName);
             createModel(api, modelName, null, schema, mime);

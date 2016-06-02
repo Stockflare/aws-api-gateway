@@ -14,7 +14,7 @@ ADD bin/confd-0.10.0-linux-amd64 /bin/confd
 WORKDIR /app
 
 RUN mvn assembly:assembly \
-    && mv build/maven/aws-apigateway-*-jar-with-dependencies.jar /aws-apigateway-importer.jar \
+    && mv target/aws-apigateway-*-jar-with-dependencies.jar /aws-apigateway-importer.jar \
     && mvn clean
 
 VOLUME ["/root/.aws"]

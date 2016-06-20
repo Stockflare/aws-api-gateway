@@ -7160,6 +7160,14 @@ paths:
           headers:
             Access-Control-Allow-Origin:
               type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Total-Messages:
+              type: "string"
+            X-Total-Messages-Visible:
+              type: "string"
+            X-Total-Messages-Hidden:
+              type: "string"
         '404':
           description: Not found
           headers:
@@ -7217,6 +7225,10 @@ paths:
             statusCode: "200"
             responseParameters:
               method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Total-Messages,X-Total-Messages-Visible,X-Total-Messages-Hidden'"
+              method.response.header.X-Total-Messages: "integration.response.header.X-Total-Messages"
+              method.response.header.X-Total-Messages-Visible: "integration.response.header.X-Total-Messages-Visible"
+              method.response.header.X-Total-Messages-Hidden: "integration.response.header.X-Total-Messages-Hidden"
             responseTemplates:
               application/json:
     options:

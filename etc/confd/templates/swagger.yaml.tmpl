@@ -7701,6 +7701,289 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /push/subscribe:
+    put:
+      description: |
+        Get Subscription
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            foo:
+              type:
+                type: string
+      responses:
+        '200':
+          description: Subscribed
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Expose-Headers:
+              type: "string"
+            X-Total-Messages:
+              type: "string"
+            X-Total-Messages-Visible:
+              type: "string"
+            X-Total-Messages-Hidden:
+              type: "string"
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: put
+        uri: {{getenv "HTTP_PROTOCOL"}}://push-api.{{getenv "HOSTED_ZONE"}}/subscribe
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          200:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+              method.response.header.Access-Control-Expose-Headers: "'X-Total-Messages,X-Total-Messages-Visible,X-Total-Messages-Hidden'"
+              method.response.header.X-Total-Messages: "integration.response.header.X-Total-Messages"
+              method.response.header.X-Total-Messages-Visible: "integration.response.header.X-Total-Messages-Visible"
+              method.response.header.X-Total-Messages-Hidden: "integration.response.header.X-Total-Messages-Hidden"
+            responseTemplates:
+              application/json:
+    delete:
+      description: |
+        Cancels subscription
+      parameters:
+        - name: type
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: delete
+        uri: {{getenv "HTTP_PROTOCOL"}}://push-api.{{getenv "HOSTED_ZONE"}}/subscribe
+        requestParameters:
+          integration.request.querystring.type: "method.request.querystring.type"
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId"
+            }
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    post:
+      description: |
+        Create subscription
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            platform:
+              type:
+                type: string
+            id:
+              type:
+                type: string
+      responses:
+        '201':
+          description: Subscribed
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '403':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '404':
+          description: Not found
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '400':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+        '500':
+          description: Error
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: aws_iam
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: post
+        uri: {{getenv "HTTP_PROTOCOL"}}://push-api.{{getenv "HOSTED_ZONE"}}/subscribe
+        requestTemplates:
+          application/json: |
+            {
+              "identity": "$context.identity.cognitoIdentityId",
+              "platform": $input.json('$.platform'),
+              "id": $input.json('$.id')
+            }
+        responses:
+          201:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          400:
+            statusCode: "400"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          403:
+            statusCode: "403"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          404:
+            statusCode: "404"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          500:
+            statusCode: "500"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+          default:
+            statusCode: "201"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,PUT,POST,DELETE'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
 securityDefinitions:
   api_key:
     type: "apiKey"

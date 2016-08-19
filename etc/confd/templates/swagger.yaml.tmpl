@@ -7792,7 +7792,7 @@ paths:
       description: |
         Cancels subscription
       parameters:
-        - name: type
+        - name: platform
           in: query
           required: true
           type: string
@@ -7829,7 +7829,7 @@ paths:
         httpMethod: delete
         uri: {{getenv "HTTP_PROTOCOL"}}://push-api.{{getenv "HOSTED_ZONE"}}/subscribe
         requestParameters:
-          integration.request.querystring.type: "method.request.querystring.type"
+          integration.request.querystring.platform: "method.request.querystring.platform"
         requestTemplates:
           application/json: |
             {

@@ -7880,6 +7880,9 @@ paths:
             id:
               type:
                 type: string
+            data:
+              type:
+                type: object
       responses:
         '201':
           description: Subscribed
@@ -7917,7 +7920,8 @@ paths:
             {
               "identity": "$context.identity.cognitoIdentityId",
               "platform": $input.json('$.platform'),
-              "id": $input.json('$.id')
+              "id": $input.json('$.id'),
+              "data": $input.json('$.data')
             }
         responses:
           201:

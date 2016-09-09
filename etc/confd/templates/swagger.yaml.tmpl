@@ -7988,6 +7988,76 @@ paths:
         requestTemplates:
           application/json: "{\"statusCode\": 200}"
         type: "mock"
+  /countries:
+    get:
+      description: |
+        Get Country data
+      parameters:
+        - name: iso3166_1_numeric
+          in: query
+          required: true
+          type: string
+        - name: iso3166_1_alpha_2
+          in: query
+          required: true
+          type: string
+        - name: iso3166_1_alpha_3
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+      x-amazon-apigateway-auth:
+        type: none
+      x-amazon-apigateway-integration:
+        type: http
+        httpMethod: get
+        uri: {{getenv "HTTP_PROTOCOL"}}://countries-api.{{getenv "HOSTED_ZONE"}}
+        requestParameters:
+          integration.request.querystring.iso3166_1_numeric: "method.request.querystring.iso3166_1_numeric"
+          integration.request.querystring.iso3166_1_alpha_2: "method.request.querystring.iso3166_1_alpha_2"
+          integration.request.querystring.iso3166_1_alpha_3: "method.request.querystring.iso3166_1_alpha_3"
+        requestTemplates:
+          application/json:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json:
+    options:
+      parameters: []
+      responses:
+        200:
+          description: "200 response"
+          headers:
+            Access-Control-Allow-Origin:
+              type: "string"
+            Access-Control-Allow-Methods:
+              type: "string"
+            Access-Control-Allow-Headers:
+              type: "string"
+            Access-Control-Max-Age:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Max-Age: "'180'"
+              method.response.header.Access-Control-Allow-Methods: "'OPTIONS,GET'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-User-Agent,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            responseTemplates:
+              application/json: "__passthrough__"
+        requestTemplates:
+          application/json: "{\"statusCode\": 200}"
+        type: "mock"
 securityDefinitions:
   api_key:
     type: "apiKey"
